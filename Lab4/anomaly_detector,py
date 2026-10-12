@@ -1,0 +1,43 @@
+from scapy.all import rdpcap, IP, TCP, UDP
+packets = rdpcap("botnet-capture-20110812-rbot.pcap")
+packets = sorted(packets, key=lambda pkt: float(pkt.time))
+ip_times = {}
+alerted_ips = []
+
+tcp_count = 0
+udp_count = 0
+
+for pkt in packets:
+	if TCP in pkt:
+		tcp_count += 1
+
+	if UDP in pkt:
+		udp_count += 1
+
+	if IP in pkt and (TCP in pkt or UDP in pkt):
+		src_ip = pkt[IP].src
+		timestamp = float(pkt.time)
+
+		if src_ip not in ip_times:
+			ip_times[src_ip] = []
+
+		
+		ip_times[src_ip] = [
+			previous_time
+			for previous_time in ip_times[src_ip]
+			if timestamp - previous_time <= 5
+		]
+
+		
+		ip_times[src_ip].append(timestamp)
+
+		
+		if len(ip_times[src_ip]) > 20 and src_ip not in alerted_ips:
+			print("ALERT: Unusually frequent traffic from", src_ip)
+			alerted_ips.append(src_ip)
+
+
+print("\nTraffic Summary")
+print("Total TCP packets:", tcp_count)
+print("Total UDP packets:", udp_count)
+print("Number of suspicious IPs:", len(alerted_ips))
