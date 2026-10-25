@@ -1,4 +1,3 @@
-"""Student analyst client: login, local port scan, local HTTP check, server PCAP."""
 import getpass
 import json
 import socket
