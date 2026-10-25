@@ -13,7 +13,6 @@ from settings import (ACCOUNT_FILE, HOST, LOG_FILE, MAX_MESSAGE_BYTES,
 
 
 def security_log(event, detail=""):
-    # Log event types and usernames only. Never log passwords, OTPs, or TOTP secrets.
     logging.info("%s %s", event, detail)
 
 
@@ -25,7 +24,7 @@ class SentinelServer(socketserver.ThreadingTCPServer):
         super().__init__(address, SentinelHandler)
         self.account = account
         self.pcap_path = pcap_path
-        self.used_steps = set()  # Prevent a TOTP code from being used twice in this process.
+        self.used_steps = set()  
         self.otp_lock = threading.Lock()
 
 
@@ -111,7 +110,6 @@ class SentinelHandler(socketserver.StreamRequestHandler):
                         self.send(False, "UNAUTHORIZED")
                     else:
                         try:
-                            # The PCAP filename is fixed server-side to avoid path traversal.
                             result = analyze_pcap(self.server.pcap_path)
                             security_log("PCAP_ANALYSIS", username)
                             self.send(True, "PCAP_RESULT", result=result)
@@ -122,7 +120,6 @@ class SentinelHandler(socketserver.StreamRequestHandler):
                             security_log("PCAP_FAILED", "SCAPY_MISSING")
                             self.send(False, "SCAPY_MISSING", message="Install Scapy first")
                         except Exception as error:
-                            # A corrupted capture or parsing issue should not crash the TCP session.
                             security_log("PCAP_FAILED", type(error).__name__)
                             self.send(False, "PCAP_ERROR", message="Capture could not be analyzed")
 
@@ -139,7 +136,6 @@ class SentinelHandler(socketserver.StreamRequestHandler):
                     self.send(False, "UNKNOWN_COMMAND")
 
                 if failures >= 3:
-                    # One reply per request; close after the third failed authentication.
                     security_log("RATE_LIMIT_DISCONNECT")
                     break
             except (TimeoutError, ConnectionResetError, BrokenPipeError, OSError):
