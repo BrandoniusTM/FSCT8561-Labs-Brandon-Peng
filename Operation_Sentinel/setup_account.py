@@ -1,4 +1,3 @@
-"""One-time setup for a local analyst account."""
 import getpass
 import json
 import os
@@ -30,7 +29,7 @@ def main():
         "password": make_password_record(password),
         "totp_secret": pyotp.random_base32()
     }
-    # Permissions 0600 keep this secret file private to the current Linux user.
+
     fd = os.open(ACCOUNT_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "w", encoding="utf-8") as file:
         json.dump(account, file, indent=2)
