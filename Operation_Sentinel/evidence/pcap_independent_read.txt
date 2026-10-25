@@ -1,0 +1,16 @@
+Independent raw-PCAP inspection (standard-library validation, not Scapy execution)
+Provided file: FSCT8561_Operation_Sentinel_Traffic.pcap
+PCAP frames: 123
+IPv4 TCP packets: 113
+IPv4 UDP packets: 10
+Source counts:
+  192.0.2.20: 63
+  192.0.2.10: 24
+  192.0.2.50: 20
+  192.0.2.60: 16
+Threshold: more than 20 IPv4 TCP/UDP packets from one IP within 5 seconds.
+  Source 192.0.2.20: trigger packet #80; window includes 21 packets starting at #54,
+    about 4.96 seconds (PCAP timestamps around 1792380009.54 to 1792380014.50).
+  Source 192.0.2.50: at most 20 packets in any 5-second window (no alert).
+These are synthetic documentation-range IP addresses and are not live traffic.
+CAUTION: User must rerun supplied application with actual Scapy and pyotp on Kali to verify outputs.

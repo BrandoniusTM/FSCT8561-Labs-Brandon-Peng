@@ -1,0 +1,39 @@
+{
+  "target": "http://127.0.0.1:8765",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "redirect_to": ""
+    },
+    {
+      "path": "/health",
+      "status": 200,
+      "content_type": "text/plain",
+      "redirect_to": ""
+    },
+    {
+      "path": "/redirect",
+      "status": 302,
+      "content_type": "not set",
+      "redirect_to": "/"
+    },
+    {
+      "path": "/missing",
+      "status": 404,
+      "content_type": "text/plain",
+      "redirect_to": ""
+    }
+  ],
+  "server": "FSCT8561LabHTTP/1.0 ",
+  "findings": [
+    "Header not present: Content-Security-Policy",
+    "Header not present: X-Content-Type-Options",
+    "Header not present: X-Frame-Options",
+    "Cookie attribute not present: HttpOnly",
+    "Cookie attribute not present: SameSite",
+    "Cookie attribute not present: Secure (local HTTP demo)"
+  ],
+  "note": "Missing protections are configuration findings, not proof of an exploit."
+}
