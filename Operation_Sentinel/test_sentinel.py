@@ -90,8 +90,6 @@ class TestOperationSentinel(unittest.TestCase):
 
     def test_06_totp_replay_rejected(self):
         import pyotp
-        # This test consumes a code and then deliberately tries that SAME code again.
-        # Reset test-only replay history so this test does not depend on test_05.
         with self.server.otp_lock:
             self.server.used_steps.clear()
         first = self.connect()
