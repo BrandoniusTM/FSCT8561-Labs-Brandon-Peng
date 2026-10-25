@@ -2,7 +2,7 @@
 from pathlib import Path
 
 PROJECT_DIR = Path(__file__).resolve().parent
-HOST = "127.0.0.1"  # Never listen on a public interface for this class demo.
+HOST = "127.0.0.1" 
 SERVER_PORT = 8766
 HTTP_PORT = 8765
 WEBSITE_URL = f"http://{HOST}:{HTTP_PORT}"
