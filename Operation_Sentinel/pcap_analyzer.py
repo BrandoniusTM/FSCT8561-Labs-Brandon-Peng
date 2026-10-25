@@ -1,4 +1,3 @@
-"""Server-side offline packet analysis using the instructor's supplied PCAP."""
 from collections import Counter, defaultdict, deque
 
 from settings import PCAP_FILE
@@ -19,7 +18,6 @@ def analyze_pcap(path=PCAP_FILE, limit=20, seconds=5):
     alerts = []
     alerted_ips = set()
 
-    # Sort because a sliding time window requires packets in timestamp order.
     indexed = sorted(enumerate(packets, start=1), key=lambda x: float(x[1].time))
 
     for packet_number, pkt in indexed:
