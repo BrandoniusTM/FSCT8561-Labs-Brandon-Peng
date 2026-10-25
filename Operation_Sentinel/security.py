@@ -1,4 +1,3 @@
-"""Password hashing and two-step TOTP checks for the student TCP server."""
 import hashlib
 import hmac
 import re
@@ -35,7 +34,6 @@ def matching_totp_step(secret, code):
         return None
     totp = pyotp.TOTP(secret)
     current_step = int(time.time() // 30)
-    # +/-1 time step allows small clock differences. This also increases replay window.
     for step in (current_step - 1, current_step, current_step + 1):
         if hmac.compare_digest(code, totp.at(step * 30)):
             return step
